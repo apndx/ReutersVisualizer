@@ -10,10 +10,18 @@ import geopandas
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import json
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+# Opening JSON file
+f = open('data/drop_down_options.json',)
+  
+# returns JSON object as 
+# a dictionary
+drop_down_options = json.load(f)
+  
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 colors = {
     'background': '#111111',
@@ -22,7 +30,7 @@ colors = {
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
-filename = "csv/country_geo_topic_counts.gpkg"
+filename = "data/country_geo_topic_counts.gpkg"
 reut_country_geo_topic = geopandas.read_file(filename)
 reut_country_geo_topic.set_index('country', inplace=True)
 reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].apply(
@@ -53,6 +61,11 @@ app.layout = html.Div(children=[
         'textAlign': 'center',
         'color': colors['text']
     }),
+  html.Label('Dropdown'),
+    dcc.Dropdown(
+        options= drop_down_options,
+        value='MTL'
+    ),
     html.Img(src="data:image/png;base64," + img2),
 ])
 
