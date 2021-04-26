@@ -47,7 +47,7 @@ app.layout = html.Div(children=[
     dcc.Dropdown(
         id='dropdown',
         options= drop_down_options,
-        value='MTL'
+        value='AFGHANISTAN'
     ),
     html.Img(id='cloud')
 ])
@@ -56,22 +56,26 @@ app.layout = html.Div(children=[
     Output(component_id='cloud', component_property='src'),
     Input('dropdown', 'value'))
 
+
 def update_cloud(selected_country):
+
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
+    country_cloud = None
 
     country_fig = plt.figure(figsize=(10, 10))
     ax = country_fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
     ax.margins(0)
+
     has_geometry = reut_country_geo_topic.loc[selected_country]['geometry'] != None
+
     if has_geometry:
         reut_country_geo_topic.loc[[selected_country]].plot('count', ax=ax)
         plt.savefig(f'pics/{selected_country}.png', bbox_inches="tight", pad_inches=0)
-
-    if has_geometry:
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                            width=900, height=900, contour_width=0.5)
+                width=900, height=900, contour_width=0.5)
+
     else:
         country_cloud = WordCloud(background_color="white", width=900, height=900)
 
