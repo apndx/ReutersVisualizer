@@ -1,4 +1,5 @@
 [
+  { "label": "World", "value": "WORLD" },
   { "label": "Afghanistan", "value": "AFGHANISTAN" },
   { "label": "Albania", "value": "ALBANIA" },
   { "label": "Algeria", "value": "ALGERIA" },
@@ -153,7 +154,7 @@
   { "label": "Russia", "value": "RUSSIA" },
   { "label": "Rwanda", "value": "RWANDA" },
   { "label": "San Marino", "value": "SAN MARINO" },
-  { "label": "Sao Tome And Principe", "value": "SAO TOME AND PRINCIPE" },
+  { "label": "Sao Tome and Principe", "value": "SAO TOME AND PRINCIPE" },
   { "label": "Saudi Arabia", "value": "SAUDI ARABIA" },
   { "label": "Senegal", "value": "SENEGAL" },
   { "label": "Serbia", "value": "SERBIA" },
@@ -183,7 +184,7 @@
   { "label": "Thailand", "value": "THAILAND" },
   { "label": "Togo", "value": "TOGO" },
   { "label": "Tonga", "value": "TONGA" },
-  { "label": "Trinidad And Tobago", "value": "TRINIDAD AND TOBAGO" },
+  { "label": "Trinidad and Tobago", "value": "TRINIDAD AND TOBAGO" },
   { "label": "Tunisia", "value": "TUNISIA" },
   { "label": "Turkey", "value": "TURKEY" },
   { "label": "Turkmenistan", "value": "TURKMENISTAN" },
