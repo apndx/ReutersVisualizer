@@ -13,30 +13,22 @@ import numpy as np
 from PIL import Image
 import json
 
-
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-# Opening JSON file
 f = open('data/drop_down_options.json',)
-  
-# returns JSON object as 
-# a dictionary
 drop_down_options = json.load(f)
-  
+
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 colors = {
     'background': '#111111',
     'text': '#275f6b'
 }
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
 filename = "data/country_geo_topic_counts.gpkg"
 reut_country_geo_topic = geopandas.read_file(filename)
 reut_country_geo_topic.set_index('country', inplace=True)
 reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].apply(
     eval)
-
 
 app.layout = html.Div(children=[
     html.H1(children='Reuters topic wordclouds by countries', style={
@@ -49,19 +41,17 @@ app.layout = html.Div(children=[
         options= drop_down_options,
         value='AFGHANISTAN'
     ),
-    html.Img(id='cloud')
+    html.Img(id='cloud'),
 ])
 
 @app.callback(
     Output(component_id='cloud', component_property='src'),
     Input('dropdown', 'value'))
-
-
 def update_cloud(selected_country):
 
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
-    country_cloud = None
 
+    country_cloud = None
     country_fig = plt.figure(figsize=(10, 10))
     ax = country_fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
@@ -83,9 +73,9 @@ def update_cloud(selected_country):
     wc_img = country_cloud.to_image()
     with BytesIO() as buffer:
         wc_img.save(buffer, 'png')
-        fig = base64.b64encode(buffer.getvalue()).decode()
+        cloud_fig = base64.b64encode(buffer.getvalue()).decode()
 
-    src="data:image/png;base64," + fig
+    src="data:image/png;base64," + cloud_fig
 
     return src
 
