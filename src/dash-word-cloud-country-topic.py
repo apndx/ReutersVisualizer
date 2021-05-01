@@ -31,7 +31,7 @@ reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].ap
     eval)
 
 app.layout = html.Div(children=[
-    html.H1(children='Reuters topic wordclouds by countries', style={
+    html.H1(children='Reuters topics by countries', style={
         'textAlign': 'center',
         'color': colors['text']
     }),
@@ -42,6 +42,7 @@ app.layout = html.Div(children=[
         value='AFGHANISTAN'
     ),
     html.Img(id='cloud'),
+    dcc.Graph(id='country_topic')
 ])
 
 @app.callback(
@@ -52,7 +53,7 @@ def update_cloud(selected_country):
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
 
     country_cloud = None
-    country_fig = plt.figure(figsize=(10, 10))
+    country_fig = plt.figure(figsize=(8, 8))
     ax = country_fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
     ax.margins(0)
@@ -78,6 +79,19 @@ def update_cloud(selected_country):
     src="data:image/png;base64," + cloud_fig
 
     return src
+
+@app.callback(
+    Output(component_id='country_topic', component_property='figure'),
+    Input('dropdown', 'value'))
+def update_country_topics(selected_country):
+    country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
+
+    topic_keys = list(country_dict.keys())
+    topic_values = list(country_dict.values())
+
+    topic_fig = px.bar(x=topic_keys, y=topic_values, color=topic_values, height=800, labels={'x':'Topic', 'y':'Times used', 'color': 'Times used'})
+    topic_fig.update_layout(transition_duration=500)
+    return topic_fig
 
 
 if __name__ == '__main__':
