@@ -31,18 +31,45 @@ reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].ap
     eval)
 
 app.layout = html.Div(children=[
-    html.H1(children='Reuters topic wordclouds by countries', style={
+    html.H1(children='Reuters topics by countries', style={
         'textAlign': 'center',
         'color': colors['text']
     }),
-  html.Label('Dropdown'),
+    html.Label('Choose the country', 
+    style={
+        'color': colors['text'],
+        'textAlign': 'left',
+    }),
     dcc.Dropdown(
         id='dropdown',
-        options= drop_down_options,
-        value='AFGHANISTAN'
-    ),
-    html.Img(id='cloud'),
+        options=drop_down_options,
+        value='AFGHANISTAN', style={
+        'color': colors['text'],
+        'width': '45%',
+        'textAlign': 'left',
+    }),
+    html.Div([
+        html.Div(html.Img(id='cloud'),
+                 style={
+            'backgroundColor': 'white',
+            'margin-left': '10px',
+            'width': '45%',
+            'text-align': 'center',
+            'display': 'inline-block',
+
+        }),
+        html.Div(dcc.Graph(id='country_topic'),
+                 style={
+            'backgroundColor': 'white',
+            'margin-left': '10px',
+            'width': '45%',
+            'text-align': 'center',
+            'display': 'inline-block',
+            'vertical-align': 'top'
+        }),
+    ]),
 ])
+
 
 @app.callback(
     Output(component_id='cloud', component_property='src'),
@@ -52,7 +79,7 @@ def update_cloud(selected_country):
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
 
     country_cloud = None
-    country_fig = plt.figure(figsize=(10, 10))
+    country_fig = plt.figure(figsize=(7, 7))
     ax = country_fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
     ax.margins(0)
@@ -61,13 +88,15 @@ def update_cloud(selected_country):
 
     if has_geometry:
         reut_country_geo_topic.loc[[selected_country]].plot('count', ax=ax)
-        plt.savefig(f'pics/{selected_country}.png', bbox_inches="tight", pad_inches=0)
+        plt.savefig(f'pics/{selected_country}.png',
+                    bbox_inches="tight", pad_inches=0)
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                width=900, height=900, contour_width=0.5)
+                                  width=900, height=900, contour_width=0.5)
 
     else:
-        country_cloud = WordCloud(background_color="white", width=900, height=900)
+        country_cloud = WordCloud(
+            background_color="white", width=900, height=900)
 
     country_cloud.generate_from_frequencies(country_dict)
     wc_img = country_cloud.to_image()
@@ -75,9 +104,24 @@ def update_cloud(selected_country):
         wc_img.save(buffer, 'png')
         cloud_fig = base64.b64encode(buffer.getvalue()).decode()
 
-    src="data:image/png;base64," + cloud_fig
+    src = "data:image/png;base64," + cloud_fig
 
     return src
+
+
+@app.callback(
+    Output(component_id='country_topic', component_property='figure'),
+    Input('dropdown', 'value'))
+def update_country_topics(selected_country):
+    country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
+
+    topic_keys = list(country_dict.keys())
+    topic_values = list(country_dict.values())
+
+    topic_fig = px.bar(x=topic_keys, y=topic_values, color=topic_values, height=800, labels={
+                       'x': 'Topic', 'y': 'Times used', 'color': 'Times used'})
+    topic_fig.update_layout(transition_duration=500)
+    return topic_fig
 
 
 if __name__ == '__main__':
