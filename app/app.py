@@ -19,6 +19,9 @@ f = open('data/drop_down_options.json',)
 drop_down_options = json.load(f)
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+server = app.server
+
 colors = {
     'background': '#111111',
     'text': '#275f6b'
