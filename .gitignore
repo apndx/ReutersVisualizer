@@ -3,6 +3,6 @@
 notebooks/REUTERS_CORPUS_2/
 __pycache__
 notebooks/csv/
-app/venv
+application/venv
 *.pyc
 .env
