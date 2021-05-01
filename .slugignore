@@ -1,0 +1,5 @@
+.ipynb_checkpoints
+.DS_Store
+src/REUTERS_CORPUS_2/
+__pycache__
+notebooks
