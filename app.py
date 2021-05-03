@@ -31,6 +31,7 @@ filename = "data/country_geo_topic_counts.gpkg"
 reut_country_geo_topic = geopandas.read_file(filename)
 
 reut_country_geo_topic.set_index('index', inplace=True)
+
 reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].apply(
     eval)
 
@@ -39,30 +40,20 @@ app.layout = html.Div(children=[
         'textAlign': 'center',
         'color': colors['text']
     }),
-    html.Label('Choose the country', 
-    style={
-        'color': colors['text'],
-        'textAlign': 'left',
-    }),
+    html.Label('Choose the country',
+               style={
+                   'color': colors['text'],
+                   'textAlign': 'left',
+               }),
     dcc.Dropdown(
         id='dropdown',
         options=drop_down_options,
         value='WORLD', style={
-        'color': colors['text'],
-        'width': '45%',
-        'textAlign': 'left',
-    }),
-    html.Div([
-        html.Div(html.Img(id='cloud'),
-                 style={
-            'backgroundColor': 'white',
-            'margin-left': '10px',
-            'width': '45%',
-            'text-align': 'center',
-            'display': 'inline-block',
-            'padding-top': '30px'
-
+            'color': colors['text'],
+            'width': '40%',
+            'textAlign': 'left',
         }),
+    html.Div([
         html.Div(dcc.Graph(id='country_topic'),
                  style={
             'backgroundColor': 'white',
@@ -71,6 +62,15 @@ app.layout = html.Div(children=[
             'text-align': 'center',
             'display': 'inline-block',
             'vertical-align': 'top'
+        }),
+        html.Div(html.Img(id='cloud'),
+                 style={
+            'backgroundColor': 'white',
+            'margin-left': '10px',
+            'width': '45%',
+            'text-align': 'center',
+            'display': 'inline-block',
+            'padding-top': '30px'
         }),
     ]),
 ])
