@@ -60,6 +60,7 @@ app.layout = html.Div(children=[
             'width': '45%',
             'text-align': 'center',
             'display': 'inline-block',
+            'padding-top': '30px'
 
         }),
         html.Div(dcc.Graph(id='country_topic'),
@@ -106,7 +107,7 @@ def update_cloud(selected_country):
                                   width=900, height=900, contour_width=0.5)
     else:
         country_cloud = WordCloud(
-            background_color="white", width=900, height=900)
+            background_color="white", width=700, height=700)
 
     country_cloud.generate_from_frequencies(country_dict)
     wc_img = country_cloud.to_image()
