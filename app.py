@@ -29,7 +29,8 @@ colors = {
 
 filename = "data/country_geo_topic_counts.gpkg"
 reut_country_geo_topic = geopandas.read_file(filename)
-reut_country_geo_topic.set_index('country', inplace=True)
+
+reut_country_geo_topic.set_index('index', inplace=True)
 reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].apply(
     eval)
 
@@ -46,7 +47,7 @@ app.layout = html.Div(children=[
     dcc.Dropdown(
         id='dropdown',
         options=drop_down_options,
-        value='AFGHANISTAN', style={
+        value='WORLD', style={
         'color': colors['text'],
         'width': '45%',
         'textAlign': 'left',
@@ -96,7 +97,13 @@ def update_cloud(selected_country):
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
                                   width=900, height=900, contour_width=0.5)
-
+    elif selected_country == 'WORLD':
+        reut_country_geo_topic.plot('count', ax=ax)
+        plt.savefig(f'pics/{selected_country}.png',
+                    bbox_inches="tight", pad_inches=0)
+        country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
+        country_cloud = WordCloud(background_color="white", mask=country_mask,
+                                  width=900, height=900, contour_width=0.5)
     else:
         country_cloud = WordCloud(
             background_color="white", width=900, height=900)
