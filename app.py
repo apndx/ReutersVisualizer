@@ -15,10 +15,10 @@ import json
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-
-colorscales =   ['BuGn', 'GnBu', 'cividis', 'gray', 'Greens', 'Greys', 'hot','hsv', 'inferno', 'jet', 'magma', 'Oranges', 'OrRd',  'PiYG', 'plasma', 'PRGn','PuOr','PuBu', 'PuBuGn', 'PuRd', 'Purples', 'rainbow','RdBu', 'RdGy', 'RdPu', 'RdYlBu', 'Reds','Spectral', 'twilight','viridis', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd']
-f = open('data/drop_down_options.json',)
-drop_down_options = json.load(f)
+f_country = open('data/drop_down_options.json')
+drop_down_options = json.load(f_country)
+f_colours = open('data/color_options.json')
+colorscales = json.load(f_colours)
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -62,8 +62,7 @@ app.layout = html.Div(children=[
                }),
     dcc.Dropdown(
         id='colorscale',
-        options=[{"value": x, "label": x}
-                 for x in colorscales],
+        options= colorscales,
         value='viridis', style={
             'color': colors['text'],
             'width': '40%',
