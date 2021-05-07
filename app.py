@@ -15,6 +15,8 @@ import json
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+
+colorscales =   ['BuGn', 'GnBu', 'cividis', 'gray', 'Greens', 'Greys', 'hot','hsv', 'inferno', 'jet', 'magma', 'Oranges', 'OrRd',  'PiYG', 'plasma', 'PRGn','PuOr','PuBu', 'PuBuGn', 'PuRd', 'Purples', 'rainbow','RdBu', 'RdGy', 'RdPu', 'RdYlBu', 'Reds','Spectral', 'twilight','viridis', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd']
 f = open('data/drop_down_options.json',)
 drop_down_options = json.load(f)
 
@@ -53,6 +55,20 @@ app.layout = html.Div(children=[
             'width': '40%',
             'textAlign': 'left',
         }),
+    html.Label('Choose the colour scale',
+               style={
+                   'color': colors['text'],
+                   'textAlign': 'left',
+               }),
+    dcc.Dropdown(
+        id='colorscale',
+        options=[{"value": x, "label": x}
+                 for x in colorscales],
+        value='viridis', style={
+            'color': colors['text'],
+            'width': '40%',
+            'textAlign': 'left',
+        }),
     html.Div([
         html.Div(dcc.Graph(id='country_topic'),
                  style={
@@ -78,8 +94,9 @@ app.layout = html.Div(children=[
 
 @app.callback(
     Output(component_id='cloud', component_property='src'),
-    Input('dropdown', 'value'))
-def update_cloud(selected_country):
+    Input('dropdown', 'value'),
+    Input('colorscale', 'value'))
+def update_cloud(selected_country, scale):
 
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
 
@@ -97,17 +114,17 @@ def update_cloud(selected_country):
                     bbox_inches="tight", pad_inches=0)
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                                  width=900, height=900, contour_width=0.5)
+                                  width=900, height=900, contour_width=0.5, colormap=scale)
     elif selected_country == 'WORLD':
         reut_country_geo_topic.plot('count', ax=ax)
         plt.savefig(f'pics/{selected_country}.png',
                     bbox_inches="tight", pad_inches=0)
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                                  width=900, height=900, contour_width=0.5)
+                                  width=900, height=900, contour_width=0.5, colormap=scale)
     else:
         country_cloud = WordCloud(
-            background_color="white", width=700, height=700)
+            background_color="white", width=700, height=700, colormap=scale)
 
     country_cloud.generate_from_frequencies(country_dict)
     wc_img = country_cloud.to_image()
@@ -122,15 +139,18 @@ def update_cloud(selected_country):
 
 @app.callback(
     Output(component_id='country_topic', component_property='figure'),
-    Input('dropdown', 'value'))
-def update_country_topics(selected_country):
+    Input('dropdown', 'value'),
+    Input('colorscale', 'value'))
+def update_country_topics(selected_country, scale):
+
+    scale = scale.lower()
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
 
     topic_keys = list(country_dict.keys())
     topic_values = list(country_dict.values())
 
     topic_fig = px.bar(x=topic_keys, y=topic_values, color=topic_values, height=800, labels={
-                       'x': 'Topic', 'y': 'Times used', 'color': 'Times used'})
+                       'x': 'Topic', 'y': 'Times used', 'color': 'Times used'}, color_continuous_scale=scale)
     topic_fig.update_layout(transition_duration=500)
     return topic_fig
 
