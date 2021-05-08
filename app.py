@@ -15,7 +15,7 @@ import json
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-f_country = open('data/drop_down_options.json')
+f_country = open('data/country_options.json')
 drop_down_options = json.load(f_country)
 f_colours = open('data/color_options.json')
 colorscales = json.load(f_colours)
