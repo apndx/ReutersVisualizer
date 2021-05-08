@@ -62,7 +62,7 @@ app.layout = html.Div(children=[
                }),
     dcc.Dropdown(
         id='colorscale',
-        options= colorscales,
+        options=colorscales,
         value='viridis', style={
             'color': colors['text'],
             'width': '40%',
@@ -99,12 +99,12 @@ def update_cloud(selected_country, scale):
 
     country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
 
-    country_cloud = None
     country_fig = plt.figure(figsize=(7, 7))
     ax = country_fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
     ax.margins(0)
 
+    country_cloud = None
     has_geometry = reut_country_geo_topic.loc[selected_country]['geometry'] != None
 
     if has_geometry:
@@ -132,7 +132,8 @@ def update_cloud(selected_country, scale):
         cloud_fig = base64.b64encode(buffer.getvalue()).decode()
 
     src = "data:image/png;base64," + cloud_fig
-
+    plt.clf()
+    plt.close(country_fig)
     return src
 
 
