@@ -30,6 +30,11 @@ colors = {
     'text': '#275f6b'
 }
 
+left_style = {
+    'color': colors['text'],
+    'textAlign': 'left'
+}
+
 filename = "data/country_geo_topic_counts.gpkg"
 reut_country_geo_topic = geopandas.read_file(filename)
 
@@ -56,10 +61,7 @@ app.layout = html.Div(children=[
                                                'width': '60%'
                                            }), style={'border': 'none'}),
                         html.Td(html.Label('Choose the colour scale',
-                                           style={
-                                               'color': colors['text'],
-                                               'textAlign': 'left'
-                                           }), style={'border': 'none'}),
+                                           style=left_style), style={'border': 'none'}),
                     ]
                 ),
                 html.Tr(
@@ -68,18 +70,12 @@ app.layout = html.Div(children=[
                             dcc.Dropdown(
                                 id='dropdown',
                                 options=drop_down_options,
-                                value='WORLD', style={
-                                    'color': colors['text'],
-                                    'textAlign': 'left',
-                                }), style={'border': 'none', 'width': '60%'}),
+                                value='WORLD', style=left_style), style={'border': 'none', 'width': '60%'}),
                         html.Td(
                             dcc.Dropdown(
                                 id='colorscale',
                                 options=colorscales,
-                                value='viridis', style={
-                                    'color': colors['text'],
-                                    'textAlign': 'left',
-                                }), style={'border': 'none'})
+                                value='viridis', style=left_style), style={'border': 'none'})
                     ])
             ])
         ]),
