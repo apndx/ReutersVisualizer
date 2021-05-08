@@ -44,7 +44,7 @@ reut_country_geo_topic['topiccounts'] = reut_country_geo_topic['topiccounts'].ap
     eval)
 
 app.layout = html.Div(children=[
-    html.H1(children='Reuters topics by countries', style={
+    html.H1(id='title', style={
         'textAlign': 'center',
         'color': colors['text']
     }),
@@ -166,6 +166,16 @@ def update_country_topics(selected_country, scale):
     topic_fig.update_layout(transition_duration=500)
     return topic_fig
 
+
+@app.callback(
+    Output(component_id='title', component_property='children'),
+    Input('dropdown', 'value')
+)
+def update_output_div(selected_country):
+    if selected_country == 'WORLD':
+        return 'Reuters topics for the World'
+    else:
+        return 'Reuters topics for {}'.format(selected_country.lower().capitalize())
 
 if __name__ == '__main__':
     app.run_server(debug=True)
