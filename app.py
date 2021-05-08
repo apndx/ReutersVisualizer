@@ -13,6 +13,7 @@ import numpy as np
 from PIL import Image
 import json
 
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 f_country = open('data/country_options.json')
@@ -42,53 +43,68 @@ app.layout = html.Div(children=[
         'textAlign': 'center',
         'color': colors['text']
     }),
-    html.Label('Choose the country',
-               style={
-                   'color': colors['text'],
-                   'textAlign': 'left',
-               }),
-    dcc.Dropdown(
-        id='dropdown',
-        options=drop_down_options,
-        value='WORLD', style={
-            'color': colors['text'],
-            'width': '40%',
-            'textAlign': 'left',
-        }),
-    html.Label('Choose the colour scale',
-               style={
-                   'color': colors['text'],
-                   'textAlign': 'left',
-               }),
-    dcc.Dropdown(
-        id='colorscale',
-        options=colorscales,
-        value='viridis', style={
-            'color': colors['text'],
-            'width': '40%',
-            'textAlign': 'left',
-        }),
+
     html.Div([
-        html.Div(dcc.Graph(id='country_topic'),
-                 style={
-            'backgroundColor': 'white',
-            'margin-left': '10px',
-            'width': '45%',
-            'text-align': 'center',
-            'display': 'inline-block',
-            'vertical-align': 'top'
-        }),
-        html.Div(html.Img(id='cloud'),
-                 style={
-            'backgroundColor': 'white',
-            'margin-left': '10px',
-            'width': '45%',
-            'text-align': 'center',
-            'display': 'inline-block',
-            'padding-top': '30px'
-        }),
-    ]),
-])
+        html.Div(children=[
+            html.Table([
+                html.Tr(
+                    [
+                        html.Td(html.Label('Choose the country',
+                                           style={
+                                               'color': colors['text'],
+                                               'textAlign': 'left',
+                                               'width': '60%'
+                                           }), style={'border': 'none'}),
+                        html.Td(html.Label('Choose the colour scale',
+                                           style={
+                                               'color': colors['text'],
+                                               'textAlign': 'left'
+                                           }), style={'border': 'none'}),
+                    ]
+                ),
+                html.Tr(
+                    [
+                        html.Td(
+                            dcc.Dropdown(
+                                id='dropdown',
+                                options=drop_down_options,
+                                value='WORLD', style={
+                                    'color': colors['text'],
+                                    'textAlign': 'left',
+                                }), style={'border': 'none', 'width': '60%'}),
+                        html.Td(
+                            dcc.Dropdown(
+                                id='colorscale',
+                                options=colorscales,
+                                value='viridis', style={
+                                    'color': colors['text'],
+                                    'textAlign': 'left',
+                                }), style={'border': 'none'})
+                    ])
+            ])
+        ]),
+
+        html.Div([
+            html.Div(dcc.Graph(id='country_topic'),
+                     style={
+                'backgroundColor': 'white',
+                'margin-left': '10px',
+                'width': '45%',
+                'text-align': 'center',
+                'display': 'inline-block',
+                'vertical-align': 'top'
+            }),
+            html.Div(html.Img(id='cloud'),
+                     style={
+                'backgroundColor': 'white',
+                'margin-left': '10px',
+                'width': '45%',
+                'text-align': 'center',
+                'display': 'inline-block',
+                'padding-top': '30px'
+            }),
+        ]),
+    ])])
 
 
 @app.callback(
@@ -150,7 +166,7 @@ def update_country_topics(selected_country, scale):
     topic_values = list(country_dict.values())
 
     topic_fig = px.bar(x=topic_keys, y=topic_values, color=topic_values, height=800, labels={
-                       'x': 'Topic', 'y': 'Times used', 'color': 'Times used'}, color_continuous_scale=scale)
+        'x': 'Topic', 'y': 'Times used', 'color': 'Times used'}, color_continuous_scale=scale)
     topic_fig.update_layout(transition_duration=500)
     return topic_fig
 
