@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import json
-
+from word_cloud_colors import Freq_colormap_color_func
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -179,33 +179,6 @@ def update_output_div(selected_country):
         return 'Reuters topics for the World'
     else:
         return 'Reuters topics for {}'.format(selected_country.lower().capitalize())
-
-class Freq_colormap_color_func(object):
-    """Color func created from matplotlib colormap.
-
-    Parameters
-    ----------
-    colormap : string or matplotlib colormap
-        Colormap to sample from
-
-    Example
-    -------
-    >>> WordCloud(color_func=colormap_color_func("magma"))
-
-    """
-    def __init__(self, colormap, word_dict):
-        import matplotlib.pyplot as plt
-        self.colormap = plt.cm.get_cmap(colormap)
-        self.freq_max = list(word_dict.values())[-1]
-        self.word_dict = word_dict
-        
-
-    def __call__(self, word, **kwargs):
-        freq = self.word_dict.get(word)/self.freq_max
-        r, g, b, _ = np.maximum(0, 255 * np.array(self.colormap(
-            freq)))
-        return "rgb({:.0f}, {:.0f}, {:.0f})".format(r, g, b)
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
