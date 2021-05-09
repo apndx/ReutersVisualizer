@@ -48,7 +48,6 @@ app.layout = html.Div(children=[
         'textAlign': 'center',
         'color': colors['text']
     }),
-
     html.Div([
         html.Div(children=[
             html.Table([
@@ -62,6 +61,8 @@ app.layout = html.Div(children=[
                                            }), style={'border': 'none'}),
                         html.Td(html.Label('Choose the colour scale',
                                            style=left_style), style={'border': 'none'}),
+                        html.Td(html.A('Info', href='https://github.com/apndx/ReutersVisualizer',
+                                       style=left_style, target='_blank'), style={'border': 'none'}),
                     ]
                 ),
                 html.Tr(
@@ -76,7 +77,8 @@ app.layout = html.Div(children=[
                                 id='colorscale',
                                 options=colorscales,
                                 value='viridis', style=left_style), style={'border': 'none'})
-                    ])
+                    ]),
+
             ])
         ]),
 
@@ -176,6 +178,7 @@ def update_output_div(selected_country):
         return 'Reuters topics for the World'
     else:
         return 'Reuters topics for {}'.format(selected_country.lower().capitalize())
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
