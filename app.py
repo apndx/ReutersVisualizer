@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import json
-
+from word_cloud_colors import Freq_colormap_color_func
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -118,6 +118,7 @@ def update_cloud(selected_country, scale):
     ax.axis('off')
     ax.margins(0)
 
+    own_colour_func = Freq_colormap_color_func(scale, country_dict)
     country_cloud = None
     has_geometry = reut_country_geo_topic.loc[selected_country]['geometry'] != None
 
@@ -127,17 +128,17 @@ def update_cloud(selected_country, scale):
                     bbox_inches="tight", pad_inches=0)
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                                  width=900, height=900, contour_width=0.5, colormap=scale)
+                                  width=900, height=900, contour_width=0.5, color_func=own_colour_func)
     elif selected_country == 'WORLD':
         reut_country_geo_topic.plot('count', ax=ax)
         plt.savefig(f'pics/{selected_country}.png',
                     bbox_inches="tight", pad_inches=0)
         country_mask = np.array(Image.open(f'pics/{selected_country}.png'))
         country_cloud = WordCloud(background_color="white", mask=country_mask,
-                                  width=900, height=900, contour_width=0.5, colormap=scale)
+                                  width=900, height=900, contour_width=0.5, color_func=own_colour_func)
     else:
         country_cloud = WordCloud(
-            background_color="white", width=700, height=700, colormap=scale)
+            background_color="white", width=700, height=700, color_func=own_colour_func)
 
     country_cloud.generate_from_frequencies(country_dict)
     wc_img = country_cloud.to_image()
@@ -178,7 +179,6 @@ def update_output_div(selected_country):
         return 'Reuters topics for the World'
     else:
         return 'Reuters topics for {}'.format(selected_country.lower().capitalize())
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
