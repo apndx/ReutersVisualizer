@@ -48,6 +48,10 @@ app.layout = html.Div(children=[
         'textAlign': 'center',
         'color': colors['text']
     }),
+    html.H4(id='docs', style={
+            'textAlign': 'center',
+            'color': colors['text']
+            }),
     html.Div([
         html.Div(children=[
             html.Table([
@@ -174,11 +178,23 @@ def update_country_topics(selected_country, scale):
     Output(component_id='title', component_property='children'),
     Input('dropdown', 'value')
 )
-def update_output_div(selected_country):
+def update_title(selected_country):
     if selected_country == 'WORLD':
         return 'Reuters topics for the World'
     else:
         return 'Reuters topics for {}'.format(selected_country.title())
+
+@app.callback(
+    Output(component_id='docs', component_property='children'),
+    Input('dropdown', 'value')
+)
+def update_subtitle(selected_country):
+    country_dict = reut_country_geo_topic.loc[selected_country]['topiccounts']
+    topic_count = sum(country_dict.values())
+    doc_count = int(reut_country_geo_topic.loc[selected_country]['count'])
+    unique_topics = len(country_dict)
+    return 'Total of {} documents with {} topics, {} of topics unique'.format(doc_count, topic_count, unique_topics)
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
