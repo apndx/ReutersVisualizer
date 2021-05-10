@@ -178,7 +178,7 @@ def update_output_div(selected_country):
     if selected_country == 'WORLD':
         return 'Reuters topics for the World'
     else:
-        return 'Reuters topics for {}'.format(selected_country.lower().capitalize())
+        return 'Reuters topics for {}'.format(selected_country.title())
 
 if __name__ == '__main__':
     app.run_server(debug=True)

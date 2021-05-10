@@ -7,7 +7,7 @@ class Freq_colormap_color_func(object):
     Parameters
     ----------
     colormap : string or matplotlib colormap
-    word_dict : dictionary that has word frequencies
+    word_dict : sorted dictionary that has word frequencies from smallest to largest
 
     Example
     -------
